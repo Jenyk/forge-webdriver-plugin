@@ -1,0 +1,47 @@
+package $package;
+
+import java.util.concurrent.TimeUnit;
+import org.junit.*;
+import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
+import org.openqa.selenium.*;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class ${ClassToTest}SeleniumTest {
+
+    private WebDriver driver;
+    private String baseUrl;
+    private StringBuffer verificationErrors = new StringBuffer();
+    private String indexPage;
+
+    @Before
+    public void setUp() throws Exception {
+        driver = new FirefoxDriver();  ## nastavení ?
+        baseUrl = "http://localhost:8080/";
+        indexPage = "/${projectName}/faces/index.xhtml"; ## faces?
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void testCRUD() throws Exception {
+
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        driver.quit();
+        String verificationErrorString = verificationErrors.toString();
+        if (!"".equals(verificationErrorString)) {
+            fail(verificationErrorString);
+        }
+    }
+
+    private boolean isElementPresent(By by) {
+        try {
+            driver.findElement(by);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+}

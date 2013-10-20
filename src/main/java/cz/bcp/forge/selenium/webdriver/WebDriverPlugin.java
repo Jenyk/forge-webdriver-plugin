@@ -1,21 +1,32 @@
 package cz.bcp.forge.selenium.webdriver;
 
+import java.io.FileNotFoundException;
+import java.io.StringWriter;
 import java.util.List;
+import java.util.Properties;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
+import org.jboss.forge.parser.JavaParser;
+import org.jboss.forge.parser.java.JavaClass;
+import org.jboss.forge.parser.java.JavaSource;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.dependencies.Dependency;
 import org.jboss.forge.project.dependencies.DependencyBuilder;
 import org.jboss.forge.project.dependencies.ScopeType;
 import org.jboss.forge.project.facets.DependencyFacet;
+import org.jboss.forge.project.facets.JavaSourceFacet;
+import org.jboss.forge.resources.java.JavaResource;
+import org.jboss.forge.shell.PromptType;
 import org.jboss.forge.shell.Shell;
+import org.jboss.forge.shell.events.PickupResource;
 import org.jboss.forge.shell.plugins.Alias;
 import org.jboss.forge.shell.plugins.Command;
 import org.jboss.forge.shell.plugins.Option;
-import org.jboss.forge.shell.plugins.PipeIn;
 import org.jboss.forge.shell.plugins.PipeOut;
 import org.jboss.forge.shell.plugins.Plugin;
 import org.jboss.forge.shell.plugins.SetupCommand;
-import cz.bcp.forge.selenium.webdriver.DependencyUtil;
 
 /**
  *
@@ -35,6 +46,9 @@ public class WebDriverPlugin implements Plugin {
 	@Inject
 	private Project project;
 
+    @Inject
+    private Event<PickupResource> pickup;
+
 	private DependencyFacet dependencyFacet;
 
 	@SetupCommand
@@ -43,6 +57,38 @@ public class WebDriverPlugin implements Plugin {
 		installJunitDependencies();
 		installWebDriverDependencies();
 	}
+
+    static {
+        Properties properties = new Properties();
+        properties.setProperty("resource.loader", "class");
+        properties.setProperty("class.resource.loader.class",
+                "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+
+        Velocity.init(properties);
+    }
+
+    @Command(value = "create-test", help = "Create a new test class with a default @Deployment method")
+    public void createTest(@Option(name = "class", required = true, type = PromptType.JAVA_CLASS) JavaResource classUnderTest,
+                           final PipeOut out)
+            throws FileNotFoundException {
+        JavaSourceFacet java = project.getFacet(JavaSourceFacet.class);
+
+        JavaSource<?> javaSource = classUnderTest.getJavaSource();
+
+        VelocityContext context = new VelocityContext();
+        context.put("package", javaSource.getPackage());
+        context.put("ClassToTest", javaSource.getName());
+        context.put("classToTest", javaSource.getName().toLowerCase());
+        context.put("packageImport", javaSource.getPackage());
+
+        StringWriter writer = new StringWriter();
+        Velocity.mergeTemplate("TestTemplate.vtl", "UTF-8", context, writer);
+
+        JavaClass testClass = JavaParser.parse(JavaClass.class, writer.toString());
+        java.saveTestJavaSource(testClass);
+
+        pickup.fire(new PickupResource(java.getTestJavaResource(testClass)));
+    }
 	
 	private void installJunitDependencies() {
 		DependencyBuilder junitDependency = createJunitDependency();
