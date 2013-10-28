@@ -22,7 +22,6 @@ import org.jboss.forge.project.facets.DependencyFacet;
 import org.jboss.forge.project.facets.JavaSourceFacet;
 import org.jboss.forge.project.facets.MetadataFacet;
 import org.jboss.forge.project.facets.WebResourceFacet;
-import org.jboss.forge.resources.java.JavaFieldResource;
 import org.jboss.forge.resources.java.JavaResource;
 import org.jboss.forge.shell.PromptType;
 import org.jboss.forge.shell.Shell;
@@ -86,6 +85,7 @@ public class WebDriverPlugin implements Plugin {
         List fields = new ArrayList<Field>();
         for (Member<?, ?> member : javaSource.getMembers()) {
             if (member instanceof Field) {
+                if (((Field) member).getType().equals("String"))
                 fields.add(member);
             }
         }

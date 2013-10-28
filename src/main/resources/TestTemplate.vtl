@@ -26,20 +26,18 @@ public class ${ClassToTest}SeleniumTest {
     public void testCRUD() throws Exception {
         // Create
         driver.get(baseUrl + indexPage);
-        driver.findElement(By.linkText("${ClassToTest}")).click(); ## Base, vždycky název třídy?
+        driver.findElement(By.linkText("${ClassToTest}")).click();
         driver.findElement(By.linkText("Create New")).click();
 
         #foreach( $field in $fields )
-            #if( $field.getName() != "id" && $field.getName() != "version" )
-                #set( $fieldName = $field.getName() )
-                #set( $FieldName = $field.getName().substring(0,1).toUpperCase() + $field.getName().substring(1) )
+            #set( $fieldName = $field.getName() )
+            #set( $FieldName = $field.getName().substring(0,1).toUpperCase() + $field.getName().substring(1) )
 
-                // ${fieldName}
-                WebElement ${fieldName}TextBox = driver.findElement(By.id("create:${classToTest}Bean${ClassToTest}${FieldName}"));
-                ${fieldName}TextBox.clear();
-                String ${fieldName} = "test_${fieldName}";    ## test item?
-                ${fieldName}TextBox.sendKeys(${fieldName});
-            #end
+            // ${fieldName}
+            WebElement ${fieldName}TextBox = driver.findElement(By.id("create:${classToTest}Bean${ClassToTest}${FieldName}"));
+            ${fieldName}TextBox.clear();
+            String ${fieldName} = "test_${fieldName}";
+            ${fieldName}TextBox.sendKeys(${fieldName});
         #end
         driver.findElement(By.linkText("Save")).click();
 
@@ -48,12 +46,10 @@ public class ${ClassToTest}SeleniumTest {
 
         try {
             #foreach( $field in $fields )
-                #if( $field.getName() != "id" && $field.getName() != "version" )
-                    #set( $fieldName = $field.getName() )
-                    #set( $FieldName = $field.getName().substring(0,1).toUpperCase() + $field.getName().substring(1) )
-                    WebElement ${fieldName}Result = driver.findElement(By.id("${classToTest}Bean${ClassToTest}$FieldName"));
-                    assertTrue(${fieldName}Result.getText().matches(${fieldName}));
-                #end
+                #set( $fieldName = $field.getName() )
+                #set( $FieldName = $field.getName().substring(0,1).toUpperCase() + $field.getName().substring(1) )
+                WebElement ${fieldName}Result = driver.findElement(By.id("${classToTest}Bean${ClassToTest}$FieldName"));
+                assertTrue(${fieldName}Result.getText().matches(${fieldName}));
             #end
         } catch (Error e) {
             verificationErrors.append(e.toString());
@@ -67,27 +63,23 @@ public class ${ClassToTest}SeleniumTest {
         driver.findElement(By.linkText("Edit")).click();
 
         #foreach( $field in $fields )
-            #if( $field.getName() != "id" && $field.getName() != "version" )
-                #set( $fieldName = $field.getName() )
-                #set( $FieldName = $field.getName().substring(0,1).toUpperCase() + $field.getName().substring(1) )
+            #set( $fieldName = $field.getName() )
+            #set( $FieldName = $field.getName().substring(0,1).toUpperCase() + $field.getName().substring(1) )
 
-                // ${fieldName}
-                ${fieldName}TextBox = driver.findElement(By.id("create:${classToTest}Bean${ClassToTest}${FieldName}"));
-                ${fieldName}TextBox.clear();
-                String new${FieldName} = "test_${fieldName}2";
-                ${fieldName}TextBox.sendKeys(new${FieldName});
-            #end
+            // ${fieldName}
+            ${fieldName}TextBox = driver.findElement(By.id("create:${classToTest}Bean${ClassToTest}${FieldName}"));
+            ${fieldName}TextBox.clear();
+            String new${FieldName} = "test_${fieldName}2";
+            ${fieldName}TextBox.sendKeys(new${FieldName});
         #end
         driver.findElement(By.linkText("Save")).click();
 
         try {
             #foreach( $field in $fields )
-                #if( $field.getName() != "id" && $field.getName() != "version" )
-                    #set( $fieldName = $field.getName() )
-                    #set( $FieldName = $field.getName().substring(0,1).toUpperCase() + $field.getName().substring(1) )
-                    WebElement ${fieldName}Result = driver.findElement(By.id("${classToTest}Bean${ClassToTest}${FieldName}"));
-                    assertTrue(${fieldName}Result.getText().matches(new${FieldName}));
-                #end
+                #set( $fieldName = $field.getName() )
+                #set( $FieldName = $field.getName().substring(0,1).toUpperCase() + $field.getName().substring(1) )
+                WebElement ${fieldName}Result = driver.findElement(By.id("${classToTest}Bean${ClassToTest}${FieldName}"));
+                assertTrue(${fieldName}Result.getText().matches(new${FieldName}));
             #end
         } catch (Error e) {
             verificationErrors.append(e.toString());
