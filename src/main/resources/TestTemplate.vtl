@@ -3,10 +3,16 @@ package $package;
 import java.util.concurrent.TimeUnit;
 import org.junit.*;
 import static org.junit.Assert.*;
-import org.junit.runner.RunWith;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+/**
+ * Automaticly generated WebDriver test skeleton
+ * contains examples for String fields
+ * When using the provided JSF examples, make sure to check
+ * the IDs of multi-word entities (camel case, spacing)
+ *
+ */
 public class ${ClassToTest}SeleniumTest {
 
     private WebDriver driver;
@@ -16,10 +22,11 @@ public class ${ClassToTest}SeleniumTest {
 
     @Before
     public void setUp() throws Exception {
-        driver = new FirefoxDriver();  ## nastavení ?
+        driver = new FirefoxDriver();  
         baseUrl = "http://localhost:8080/";
-        indexPage = "/${projectName}/faces/index.xhtml"; ## faces?
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		// TODO: add path to index page 
+        indexPage = "index page path"; // JSF example: "/${projectName}/faces/index.xhtml"; 
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }
 
     @Test
@@ -30,25 +37,33 @@ public class ${ClassToTest}SeleniumTest {
         driver.findElement(By.linkText("Create New")).click();
 
         #foreach( $field in $fields )
-            #set( $fieldName = $field.getName() )
-            #set( $FieldName = $field.getName().substring(0,1).toUpperCase() + $field.getName().substring(1) )
+            #set( $fieldName = $field.getName() )       
+			#set( $FieldName = $field.getName().substring(0,1).toUpperCase() + $field.getName().substring(1) )
 
             // ${fieldName}
-            WebElement ${fieldName}TextBox = driver.findElement(By.id("create:${classToTest}Bean${ClassToTest}${FieldName}"));
+			// TODO: add webelement ID 
+			String ${fieldName}TextBoxId = "create: insert textbox id";  // create:${classToTest}Bean${ClassToTest}${FieldName}
+            WebElement ${fieldName}TextBox = driver.findElement(By.id(${fieldName}TextBoxId));
             ${fieldName}TextBox.clear();
-            String ${fieldName} = "test_${fieldName}";
+            String ${fieldName} = "test_${fieldName}"; // example for String fields
             ${fieldName}TextBox.sendKeys(${fieldName});
         #end
         driver.findElement(By.linkText("Save")).click();
-
-        assertTrue(isElementPresent(By.id("search:${classToTest}BeanPageItems:0:item$FieldName")));
-        driver.findElement(By.id("search:${classToTest}BeanPageItems:0:item$FieldName")).click();
+		
+		// TODO: add webelement ID 
+		String entityRecordId = "insert element id"; // search:${classToTest}BeanPageItems:0:item${FieldName}
+        assertTrue(isElementPresent(By.id(entityRecordId))); 
+        driver.findElement(By.id(entityRecordId)).click();
 
         try {
+			String elementId = "";
             #foreach( $field in $fields )
-                #set( $fieldName = $field.getName() )
-                #set( $FieldName = $field.getName().substring(0,1).toUpperCase() + $field.getName().substring(1) )
-                WebElement ${fieldName}Result = driver.findElement(By.id("${classToTest}Bean${ClassToTest}$FieldName"));
+                #set( $fieldName = $field.getName() )        
+				#set( $FieldName = $field.getName().substring(0,1).toUpperCase() + $field.getName().substring(1) )
+			    				
+				// TODO: add webelement ID 
+				elementId = "insert element id"; // ${classToTest}Bean${ClassToTest}$FieldName
+                WebElement ${fieldName}Result = driver.findElement(By.id(elementId));
                 assertTrue(${fieldName}Result.getText().matches(${fieldName}));
             #end
         } catch (Error e) {
@@ -57,9 +72,10 @@ public class ${ClassToTest}SeleniumTest {
 
         // Edit
         driver.get(baseUrl + indexPage);
-        driver.findElement(By.linkText("${ClassToTest}")).click();
-
-        driver.findElement(By.id("search:${classToTest}BeanPageItems:0:item${FieldName}")).click();
+		// TODO: check entity name (spacing)
+		String entityName = "${ClassToTest}";
+        driver.findElement(By.linkText(entityName)).click();
+        driver.findElement(By.id(entityRecordId)).click();
         driver.findElement(By.linkText("Edit")).click();
 
         #foreach( $field in $fields )
@@ -67,9 +83,9 @@ public class ${ClassToTest}SeleniumTest {
             #set( $FieldName = $field.getName().substring(0,1).toUpperCase() + $field.getName().substring(1) )
 
             // ${fieldName}
-            ${fieldName}TextBox = driver.findElement(By.id("create:${classToTest}Bean${ClassToTest}${FieldName}"));
+            ${fieldName}TextBox = driver.findElement(By.id(${fieldName}TextBoxId));
             ${fieldName}TextBox.clear();
-            String new${FieldName} = "test_${fieldName}2";
+            String new${FieldName} = "test_${fieldName}2";  // example for String fields
             ${fieldName}TextBox.sendKeys(new${FieldName});
         #end
         driver.findElement(By.linkText("Save")).click();
@@ -77,8 +93,12 @@ public class ${ClassToTest}SeleniumTest {
         try {
             #foreach( $field in $fields )
                 #set( $fieldName = $field.getName() )
-                #set( $FieldName = $field.getName().substring(0,1).toUpperCase() + $field.getName().substring(1) )
-                WebElement ${fieldName}Result = driver.findElement(By.id("${classToTest}Bean${ClassToTest}${FieldName}"));
+				                
+				#set( $FieldName = $field.getName().substring(0,1).toUpperCase() + $field.getName().substring(1) )
+				
+				// TODO: add webelement ID 
+				String ${fieldName}ResultId = "result id";  // ${classToTest}Bean${ClassToTest}${FieldName}
+				WebElement ${fieldName}Result = driver.findElement(By.id(${fieldName}ResultId));
                 assertTrue(${fieldName}Result.getText().matches(new${FieldName}));
             #end
         } catch (Error e) {
@@ -87,15 +107,19 @@ public class ${ClassToTest}SeleniumTest {
 
         // Delete
         driver.get(baseUrl + indexPage);
-        driver.findElement(By.linkText("${ClassToTest}")).click();
+        driver.findElement(By.linkText(entityName)).click();
 
-        assertTrue(isElementPresent(By.id("search:${classToTest}BeanPageItems:0:item${FieldName}")));
-        driver.findElement(By.id("search:${classToTest}BeanPageItems:0:item${FieldName}")).click();
+		// TODO: add webelement ID 
+		entityRecordId = "insert element id"; // search:${classToTest}BeanPageItems:0:item${FieldName}
+        assertTrue(isElementPresent(By.id(entityRecordId))); 
+		
+        assertTrue(isElementPresent(By.id(entityRecordId)));
+        driver.findElement(By.id(entityRecordId)).click();
         driver.findElement(By.linkText("Edit")).click();
         driver.findElement(By.linkText("Delete")).click();
 
-        driver.findElement(By.linkText("${ClassToTest}")).click();
-        assertFalse(isElementPresent(By.id("search:${classToTest}BeanPageItems:0:item${FieldName}")));
+        driver.findElement(By.linkText(entityName)).click();
+        assertFalse(isElementPresent(By.id(entityRecordId)));
     }
 
     @After

@@ -56,7 +56,7 @@ public class WebDriverPlugin implements Plugin {
 
     private DependencyFacet dependencyFacet;
 
-    @SetupCommand
+    @Command(value = "add-dependencies", help = "Adds WebDriver dependencies to POM")
     public void setupCommand() {
         dependencyFacet = project.getFacet(DependencyFacet.class);
         installJunitDependencies();
@@ -97,7 +97,6 @@ public class WebDriverPlugin implements Plugin {
         context.put("packageImport", javaSource.getPackage());
         context.put("fields", fields);
         context.put("projectName", metaData.getProjectName());
-
 
         StringWriter writer = new StringWriter();
         Velocity.mergeTemplate("TestTemplate.vtl", "UTF-8", context, writer);
